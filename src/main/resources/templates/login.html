@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <script src="js/vue.js"></script>
+    <script src="js/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+<div id="login">
+    <div v-if="error">
+        <h4>{{errorMsg}}</h4>
+    </div>
+
+    <p>账号：<input type="text" v-model="username" /></p>
+    <p>密码：<input type="text" v-model="password" /></p>
+
+    <button type="button"  @click="login">登录</button>
+</div>
+<script type="text/javascript">
+    var vm = new Vue({
+        el: '#login',
+        data: {
+            username: '',
+            password: '',
+            error:false,
+            errorMsg: ''
+        },
+        methods: {
+            login: function (event) {
+                var data = "username=" + vm.username + "&password=" + vm.password;
+                $.ajax({
+                    type: "post",
+                    url: "/login",
+                    data: data,
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code == 100) {//登录成功
+                            window.location.href = '/index';
+                        } else {
+                            vm.error = true;
+                            vm.errorMsg = result.msg;
+                        }
+                    }
+                });
+            }
+        },
+        created: function () {
+
+        }
+    });
+</script>
+</body>
+</html>
